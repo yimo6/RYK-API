@@ -52,6 +52,18 @@ class RYKAPI extends core{
 	public function API($code,$msg,$data){
 		exit(json_encode(array('code'=>$code,'msg'=>$msg,'data'=>$data)));
 	}
+	
+	/**
+	 * SAPI
+	 * @access public
+	 * @param int    $code
+	 * @param string $msg
+	 * @param mixed  $data
+	 * @return json
+	 */ 
+	public function SAPI($code,$msg,$data){
+		return json_encode(array('code'=>$code,'msg'=>$msg,'data'=>$data));
+	}
 
 	/**
 	 * error

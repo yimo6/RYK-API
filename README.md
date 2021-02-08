@@ -2,12 +2,17 @@
 
 一个菜鸡写的获取Liunx服务器运行信息的API
 
+## 更新日志
+    1.新增Socket协议
+
 ## 目录结构
 
 ```
  ├─ api.php     //API调用示例
  ├─ config.php  //配置项
- └─ RYK-API.php //核心文件
+ ├─ RYK-API.php //核心文件
+ ├─ client.php  //Socket客户端测试(需自行修改IP)
+ └─ socket.php  //Socket服务端文件
 ```
 
 ## 安装
