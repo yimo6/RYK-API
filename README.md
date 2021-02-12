@@ -51,3 +51,7 @@ git clone https://github.com/yimo6/RYK-API.git
 	}
 }
 ```
+
+## 使用许可
+
+[MIT](LICENSE) © Richard Littauer
