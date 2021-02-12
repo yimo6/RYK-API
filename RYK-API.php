@@ -148,28 +148,18 @@ class core{
 	private function uses(){
 		$net_start = preg_replace("/\s(?=\s)/","\\1",$this->shell('more /proc/net/dev | grep eth0 | cut -d \':\' -f 2'));
 		$nets1 = explode(' ',$net_start);
-		$cpu_str = $this->shell('more /proc/stat');
-		$pattern = "/(cpu[0-9]?)[\s]+([0-9]+)[\s]+([0-9]+)[\s]+([0-9]+)[\s]+([0-9]+)[\s]+([0-9]+)[\s]+([0-9]+)[\s]+([0-9]+)[\s]+([0-9]+)[\s]+([0-9]+)[\s]+([0-9]+)/";
-		preg_match_all($pattern, $cpu_str, $out);
-		$n = 0;
-		$cpu_s1 = $out[2][$n]+$out[3][$n]+$out[4][$n]+$out[5][$n]+$out[6][$n]+$out[7][$n]+$out[8][$n]+$out[9][$n]+$out[10][$n]+$out[11][$n];
-		$cpu_t1 = $out[5][$n];
+		$cpu_total_1 = (int)$this->shell("cat /proc/stat | grep 'cpu ' | awk '{print $2+$3+$4+$5+$6+$7}'");
+		$cpu_used_1 = (int)$this->shell("cat /proc/stat | grep 'cpu ' | awk '{print $2+$3+$4+$7}'");
 		sleep(1);
-		$cpu_str = $this->shell('more /proc/stat');
-		$pattern = "/(cpu[0-9]?)[\s]+([0-9]+)[\s]+([0-9]+)[\s]+([0-9]+)[\s]+([0-9]+)[\s]+([0-9]+)[\s]+([0-9]+)[\s]+([0-9]+)[\s]+([0-9]+)[\s]+([0-9]+)[\s]+([0-9]+)/";
-		preg_match_all($pattern, $cpu_str, $out);
-		$n = 0;
-		$cpu_s2 = $out[2][$n]+$out[3][$n]+$out[4][$n]+$out[5][$n]+$out[6][$n]+$out[7][$n]+$out[8][$n]+$out[9][$n]+$out[10][$n]+$out[11][$n];
-		$cpu_t2 = $out[5][$n];
-		$cpu_t=$cpu_t2-$cpu_t1;
-		$cpu_s=$cpu_s2-$cpu_s1;
+		$cpu_total_2 = (int)$this->shell("cat /proc/stat | grep 'cpu ' | awk '{print $2+$3+$4+$5+$6+$7}'");
+		$cpu_used_2 = (int)$this->shell("cat /proc/stat | grep 'cpu ' | awk '{print $2+$3+$4+$7}'");
+		$cpu = round(($cpu_used_2-$cpu_used_1) * 100 / ($cpu_total_2-$cpu_total_1));
 		$net_start = preg_replace("/\s(?=\s)/","\\1",$this->shell('more /proc/net/dev | grep eth0 | cut -d \':\' -f 2'));
 		$nets2 = explode(' ',$net_start);
 		$get = (int)$nets2[1]-(int)$nets1[1];
 		$post = (int)$nets2[9]-(int)$nets1[9];
-		$cpu_use = round(100*($cpu_s-$cpu_t)/$cpu_s);
 		$network_use = ['upload'=>$post,'download'=>$get];
-		return ['cpu'=>$cpu_use,'network'=>$network_use];
+		return ['cpu'=>$cpu,'network'=>$network_use];
 	}
 
 }
